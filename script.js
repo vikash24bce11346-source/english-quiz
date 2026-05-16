@@ -1,4 +1,3 @@
-
 const wordBank = [
 
   {
@@ -105,17 +104,23 @@ const wordBank = [
 ];
 
 function shuffle(array){
-  for(let i=array.length-1;i>0;i--){
-    let j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
+
+  for(let i = array.length - 1; i > 0; i--){
+
+    let j = Math.floor(Math.random() * (i + 1));
+
+    [array[i], array[j]] = [array[j], array[i]];
   }
+
   return array;
 }
 
 function getTodayKey(){
+
   const today = new Date();
-  return today.getFullYear() + "-" + 
-         (today.getMonth()+1) + "-" + 
+
+  return today.getFullYear() + "-" +
+         (today.getMonth() + 1) + "-" +
          today.getDate();
 }
 
@@ -127,14 +132,20 @@ function getDailyWords(){
   let storedWords = localStorage.getItem("dailyWords");
 
   if(storedDate === todayKey && storedWords){
+
     return JSON.parse(storedWords);
   }
 
   let shuffled = shuffle([...wordBank]);
+
   let selected = shuffled.slice(0,10);
 
-  localStorage.setItem("quizDate",todayKey);
-  localStorage.setItem("dailyWords",JSON.stringify(selected));
+  localStorage.setItem("quizDate", todayKey);
+
+  localStorage.setItem(
+    "dailyWords",
+    JSON.stringify(selected)
+  );
 
   return selected;
 }
@@ -145,11 +156,15 @@ document.getElementById("todayDate").innerText =
 "Today's Quiz : " + new Date().toDateString();
 
 let currentQuestion = 0;
+
 let score = 0;
 
 const questionEl = document.getElementById("question");
+
 const optionsEl = document.getElementById("options");
+
 const nextBtn = document.getElementById("nextBtn");
+
 const scoreBox = document.getElementById("scoreBox");
 
 function loadQuestion(){
@@ -157,7 +172,7 @@ function loadQuestion(){
   const current = vocabulary[currentQuestion];
 
   questionEl.innerHTML =
-  `What is the meaning of 
+  `What is the meaning of
   "<span style="color:#007bff">${current.word}</span>" ?`;
 
   optionsEl.innerHTML = "";
@@ -167,10 +182,11 @@ function loadQuestion(){
     const btn = document.createElement("button");
 
     btn.innerText = option;
+
     btn.classList.add("option");
 
     btn.addEventListener("click", () =>
-      checkAnswer(btn,current.answer)
+      checkAnswer(btn, current.answer)
     );
 
     optionsEl.appendChild(btn);
@@ -178,7 +194,7 @@ function loadQuestion(){
   });
 }
 
-function checkAnswer(button,correctAnswer){
+function checkAnswer(button, correctAnswer){
 
   const allOptions = document.querySelectorAll(".option");
 
@@ -187,30 +203,35 @@ function checkAnswer(button,correctAnswer){
     btn.disabled = true;
 
     if(btn.innerText === correctAnswer){
+
       btn.classList.add("correct");
     }
   });
 
   if(button.innerText === correctAnswer){
+
     score++;
   }
   else{
+
     button.classList.add("wrong");
   }
 
   nextBtn.style.display = "inline-block";
 }
 
-nextBtn.addEventListener("click",() => {
+nextBtn.addEventListener("click", () => {
 
   currentQuestion++;
 
   if(currentQuestion < vocabulary.length){
 
     loadQuestion();
+
     nextBtn.style.display = "none";
   }
   else{
+
     showScore();
   }
 
@@ -227,5 +248,5 @@ function showScore(){
     Your Score: ${score} / ${vocabulary.length}
   `;
 }
-B
+
 loadQuestion();
